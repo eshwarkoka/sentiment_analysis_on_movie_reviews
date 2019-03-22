@@ -15,6 +15,12 @@
                   <Item>
                     <option name="path" value="reviews_scrape/result.json" />
                   </Item>
+                  <Item>
+                    <option name="path" value="reviews_scrape/reviews.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="reviews_scrape/target/robo.json" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>

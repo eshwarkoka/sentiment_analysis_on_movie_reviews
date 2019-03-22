@@ -1,5 +1,10 @@
 import scrapy
-import unicodedata
+import json
+
+with open('./locators/xpaths.json') as f:
+    xpaths = json.load(f)
+
+imdb = xpaths["imdb"][0]
 
 class IMDBSpider(scrapy.Spider):
     name = 'imdb_spider'
@@ -13,25 +18,32 @@ class IMDBSpider(scrapy.Spider):
             yield scrapy.Request(url+self.ip+"&s=all" , dont_filter=True)
 
     def parse(self, response):
-        filename = 'first_title_id.txt'
-        first_title = response.xpath('(//td[@class="result_text"])[1]').extract()
-        first_title = str(first_title[0])
-        splitted = first_title.split("/")
+        #get first title from all titles
+        first_title = str(response.xpath(imdb["first_title"]).extract())
         title_id = ''
-        for each in splitted:
+        #extract title id from first title
+        for each in first_title.split("/"):
             if each.startswith("tt"):
                 title_id += each
-        with open(filename, 'w') as f:
-            f.write(title_id)
-        link = "https://www.imdb.com/title/"+title_id+"/reviews?ref_=tt_urv"
+        #form user reviews link with title id
+        link = imdb["urv_link_part_1"]+title_id+imdb["urv_link_part_2"]
+        #scrape the link and redirect to scrape_reviews function
         request = scrapy.Request(link, callback=self.scrape_reviews)
         yield request
 
     def scrape_reviews(self, response):
-        titles = response.xpath('//a[@class="title"]/text()').extract()
-        ratings = response.xpath('//span[@class="rating-other-user-rating"]//span//text()').extract()
+        #get authors of reviews
+        authors = response.xpath(imdb["authors"]).extract()
+        #get review dates of reviews
+        review_dates = response.xpath(imdb["review_dates"]).extract()
+        #get titles of reviews
+        titles = response.xpath(imdb["titles"]).extract()
+        titles = [title.replace("\n","") for title in titles]
+        #get ratings of reviews
+        ratings = response.xpath(imdb["ratings"]).extract()
         del ratings[1::2]
-        reviews = response.xpath('//div[@class="content"]').extract()
+        #get reviews
+        reviews = response.xpath(imdb["reviews"]).extract()
         start_review = r'<div class="text show-more__control">'
         end_review = r'</div>'
         reviews_list = []
@@ -42,18 +54,20 @@ class IMDBSpider(scrapy.Spider):
             temp_review = temp_review.replace("</br>", "")
             reviews_list.append(temp_review)
 
-        for i in range(0,25):
-            yield {
-                "title" : titles[i],
-                "rating" : ratings[i],
-                "review" : reviews_list[i]
-            }
-        # with open(filename, 'w') as f:
-        #     for each in titles:
-        #         f.write(each)
-        #     for each in ratings:
-        #         f.write(each+"\n")
-        #     for each_review in reviews_list:
-        #         f.write(each_review+"\n*******************\n")
-        #         #f.write(each[each.find(string_start)+len(string_start):each.find(string_end)]+"\n**********************\n")
-        #         #f.write(each+"\n*******************\n")
+        reviews = reviews_list
+        del reviews_list
+
+        json_data = [
+            {
+                "author" : a,
+                "review_date" : rd,
+                "title" : t,
+                "rating" : ra,
+                "review" : re
+            } for a, rd, t, ra, re in zip(authors, review_dates, titles, ratings, reviews)
+        ]
+
+        target_path = r'./target/'
+        output_filename = target_path+self.ip+".json"
+        with open(output_filename, 'w') as f:
+            json.dump(json_data, f, ensure_ascii=False, indent=4)
