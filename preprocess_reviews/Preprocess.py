@@ -36,4 +36,19 @@ class Preprocess:
                 continue
             stop_words_free.append(each_token.lower())
         print("stopwords removed")
-        return stop_words_free
+        return self.stemming(stop_words_free)
+        #return self.lemmatization(stop_words_free)
+
+    def stemming(self, tokens):
+        print("stemming started")
+        pst = PorterStemmer()
+        stemmed_tokens = [pst.stem(each_token) for each_token in tokens]
+        print("stemming completed")
+        return stemmed_tokens
+
+    def lemmatization(self, tokens):
+        print("lemmatization started")
+        wnl = WordNetLemmatizer()
+        lemmatized_tokens = [wnl.lemmatize(each_token) for each_token in tokens]
+        print("lemmatization completed")
+        return lemmatized_tokens
