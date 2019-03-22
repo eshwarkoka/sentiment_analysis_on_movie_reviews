@@ -1,4 +1,5 @@
 import scrapy
+import unicodedata
 
 class IMDBSpider(scrapy.Spider):
     name = 'imdb_spider'
@@ -31,11 +32,28 @@ class IMDBSpider(scrapy.Spider):
         ratings = response.xpath('//span[@class="rating-other-user-rating"]//span//text()').extract()
         del ratings[1::2]
         reviews = response.xpath('//div[@class="content"]').extract()
-        filename = "reviews.txt"
-        with open(filename, 'w') as f:
-            for each in titles:
-                f.write(each)
-            for each in ratings:
-                f.write(each+" ")
-            for each in reviews:
-                f.write(each)
+        start_review = r'<div class="text show-more__control">'
+        end_review = r'</div>'
+        reviews_list = []
+
+        for each_review in reviews:
+            temp_review = each_review[each_review.find(start_review) + len(start_review):each_review.find(end_review)]
+            temp_review = temp_review.replace("<br>", "")
+            temp_review = temp_review.replace("</br>", "")
+            reviews_list.append(temp_review)
+
+        for i in range(0,25):
+            yield {
+                "title" : titles[i],
+                "rating" : ratings[i],
+                "review" : reviews_list[i]
+            }
+        # with open(filename, 'w') as f:
+        #     for each in titles:
+        #         f.write(each)
+        #     for each in ratings:
+        #         f.write(each+"\n")
+        #     for each_review in reviews_list:
+        #         f.write(each_review+"\n*******************\n")
+        #         #f.write(each[each.find(string_start)+len(string_start):each.find(string_end)]+"\n**********************\n")
+        #         #f.write(each+"\n*******************\n")
