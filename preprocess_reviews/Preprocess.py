@@ -13,42 +13,43 @@ class Preprocess:
         return self.word_tokenization(review)
 
     def word_tokenization(self, review):
-        print("word tokenization started")
+        #print("word tokenization started")
         tokens = word_tokenize(review)
-        print("word tokenization completed")
-        print(tokens)
+        #print("word tokenization completed")
+        #print(tokens)
         return self.punctuation_removal(tokens)
 
     def punctuation_removal(self, tokens):
-        print("started removing punctuations")
+        #print("started removing punctuations")
         punc_dict = str.maketrans({ord(ch):" " for ch in string.punctuation })
         punc_free_tokens = [each_token.translate(punc_dict) for each_token in tokens if each_token.strip()]
-        print("punctuations removed")
-        print(punc_free_tokens)
+        #print("punctuations removed")
+        #print(punc_free_tokens)
         return self.stopwords_removal(punc_free_tokens)
 
     def stopwords_removal(self, tokens):
-        print("started removing stopwords")
+        #print("started removing stopwords")
         stop_words = set(stopwords.words('english'))
         stop_words_free = []
         for each_token in tokens:
-            if each_token in stop_words or any(char.isdigit() for char in each_token) or len(each_token)<3:
+            if each_token in stop_words or any(char.isdigit() for char in each_token) or len(each_token)<4:
                 continue
             stop_words_free.append(each_token.lower())
-        print("stopwords removed")
+        #print("stopwords removed")
         return self.stemming(stop_words_free)
         #return self.lemmatization(stop_words_free)
 
     def stemming(self, tokens):
-        print("stemming started")
+        #print("stemming started")
         pst = PorterStemmer()
         stemmed_tokens = [pst.stem(each_token) for each_token in tokens]
-        print("stemming completed")
-        return stemmed_tokens
+        #print("stemming completed")
+        stemmed_tokens_str = " ".join(stemmed_tokens)
+        return stemmed_tokens_str
 
     def lemmatization(self, tokens):
-        print("lemmatization started")
+        #print("lemmatization started")
         wnl = WordNetLemmatizer()
         lemmatized_tokens = [wnl.lemmatize(each_token) for each_token in tokens]
-        print("lemmatization completed")
+        #print("lemmatization completed")
         return lemmatized_tokens
