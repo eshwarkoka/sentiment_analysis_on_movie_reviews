@@ -20,7 +20,7 @@ def preprocess(movie_name):
         authors.append(json_data[i]["author"])
     print(authors)
 
-movie_name = "bat man"
+movie_name = "raatsasan"
 movie_name = movie_name.replace(" ","")
 execute_crawler(movie_name)
 preprocess(movie_name)
