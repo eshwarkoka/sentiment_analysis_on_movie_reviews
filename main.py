@@ -1,6 +1,6 @@
 import os,sys,json
 import numpy as np
-from preprocess_reviews.Preprocess import Preprocess
+from preprocess.Preprocess import PreprocessClass
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -8,24 +8,22 @@ from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
 
-p = Preprocess()
+p = PreprocessClass()
 
 reviews = []
-for line in open('full_train.txt','r'):
+for line in open('full_train_preprocessed.txt','r'):
     temp = line.strip()
-    temp_str = p.pre_process(temp)
-    reviews.append(temp_str)
+    reviews.append(temp)
+
 print(len(reviews))
 
-for line in open('full_test.txt','r'):
+for line in open('full_test_preprocessed.txt','r'):
     temp = line.strip()
-    temp_str = p.pre_process(temp)
-    reviews.append(temp_str)
+    reviews.append(temp)
 print(len(reviews))
 
-tfidf_vectorizer = TfidfVectorizer(ngram_range=(1,2))
+tfidf_vectorizer = TfidfVectorizer()
 X = tfidf_vectorizer.fit_transform(reviews)
-
 
 print(X.shape)
 
