@@ -1,0 +1,11 @@
+Bromwell High is a cartoon comedy. It ran at the same time as some other programs about school life, such as "Teachers". My 35 years in the teaching profession lead me to believe that Bromwell High's satire is much closer to reality than is "Teachers". The scramble to survive financially, the insightful students who can see right through their pathetic teachers' pomp, the pettiness of the whole situation, all remind me of the schools I knew and their students. When I saw the episode in which a student repeatedly tried to burn down the school, I immediately recalled ......... at .......... High. A classic line: INSPECTOR: I'm here to sack one of your teachers. STUDENT: Welcome to Bromwell High. I expect that many adults of my age think that Bromwell High is far fetched. What a pity that it isn't!
+
+
+stemming:
+
+bromwel high cartoon comedi time program school life teacher year teach profess lead believ bromwel high satir much closer realiti teacher scrambl surviv financi insight student right pathet teacher pomp petti whole situat remind school knew student when episod student repeatedli tri burn school immedi recal high classic line inspector sack teacher student welcom bromwel high expect mani adult think bromwel high fetch what piti
+
+
+lemmatisation:
+
+bromwell high cartoon comedy time program school life teacher year teaching profession lead believe bromwell high satire much closer reality teacher scramble survive financially insightful student right pathetic teacher pomp pettiness whole situation remind school knew student when episode student repeatedly tried burn school immediately recalled high classic line inspector sack teacher student welcome bromwell high expect many adult think bromwell high fetched what pity
