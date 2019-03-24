@@ -1,0 +1,62 @@
+
+**************************************************
+Logistic Regression:
+Train size = 0.5
+n-grams=(1,1)
+Accuracy Score: 0.88676
+logistic_regression function took 0.1292 min
+**************************************************
+Logistic Regression:
+Train size = 0.5
+n-grams=(1,2)
+Accuracy Score: 0.87876
+logistic_regression function took 1.2361 min
+**************************************************
+Logistic Regression:
+Train size = 0.75
+n-grams=(1,1)
+Accuracy Score: 0.88696
+logistic_regression function took 0.1600 min
+**************************************************
+Logistic Regression:
+Train size = 0.75
+n-grams=(1,2)
+Accuracy Score: 0.88768
+logistic_regression function took 1.3515 min
+**************************************************
+Support Vector Machine:
+Train size = 0.5
+n-grams=(1,1)
+Accuracy Score: 0.88692
+linear_svc function took 0.1134 min
+**************************************************
+Support Vector Machine:
+Train size = 0.5
+n-grams=(1,2)
+Accuracy Score: 0.89856
+linear_svc function took 0.6471 min
+**************************************************
+Support Vector Machine:
+Train size = 0.75
+n-grams=(1,1)
+Accuracy Score: 0.8936
+linear_svc function took 0.1166 min
+**************************************************
+Support Vector Machine:
+Train size = 0.75
+n-grams=(1,2)
+Accuracy Score: 0.90328
+linear_svc function took 0.6623 min
+**************************************************
+Decison Tree:
+Train size = 0.5
+n-grams=(1,1)
+Accuracy Score: 0.7094
+decision_tree function took 0.7002 min
+**************************************************
+Decison Tree:
+Train size = 0.75
+n-grams=(1,1)
+Accuracy Score: 0.72288
+decision_tree function took 1.3113 min
+**************************************************

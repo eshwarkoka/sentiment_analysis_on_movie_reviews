@@ -1,3 +1,7 @@
+'''
+This file is executed only once to generate consolidated and preprocessed
+version of the imdb data set.
+'''
 import os,sys,glob
 from Preprocess import PreprocessClass
 
