@@ -1,10 +1,12 @@
 import scrapy
 import json
+import re
 
 with open('./locators/xpaths.json') as f:
     xpaths = json.load(f)
 
 imdb = xpaths["imdb"][0]
+movie_name = ''
 
 class IMDBSpider(scrapy.Spider):
     name = 'imdb_spider'
@@ -18,8 +20,11 @@ class IMDBSpider(scrapy.Spider):
             yield scrapy.Request(url+self.ip+"&s=all" , dont_filter=True)
 
     def parse(self, response):
+        global movie_name
         #get first title from all titles
         first_title = str(response.xpath(imdb["first_title"]).extract())
+        #extract movie name from first title
+        movie_name = str(re.search(r'>(.+?)<',first_title).group(1)).replace(" ","_")
         title_id = ''
         #extract title id from first title
         for each in first_title.split("/"):
@@ -32,6 +37,7 @@ class IMDBSpider(scrapy.Spider):
         yield request
 
     def scrape_reviews(self, response):
+        global movie_name
         #get authors of reviews
         authors = response.xpath(imdb["authors"]).extract()
         #get review dates of reviews
@@ -67,7 +73,10 @@ class IMDBSpider(scrapy.Spider):
             } for a, rd, t, ra, re in zip(authors, review_dates, titles, ratings, reviews)
         ]
 
-        target_path = r'./target/'
-        output_filename = target_path+self.ip+".json"
+        project_path = r'/Users/eshwar/Documents/projects/sentiment_analysis_on_movie_reviews/'
+        target_path = project_path+"data/scraped_reviews/"
+        output_filename = target_path+movie_name+".json"
         with open(output_filename, 'w') as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
+        with open(target_path+"temp.txt", 'w') as f:
+            f.write(movie_name)
