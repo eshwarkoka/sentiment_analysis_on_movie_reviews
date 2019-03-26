@@ -25,9 +25,10 @@ class PreprocessClass:
         stop_words = set(stopwords.words('english'))
         stop_words_free = []
         for each_token in tokens:
-            if each_token in stop_words or any(char.isdigit() for char in each_token) or len(each_token)<4:
-                continue
-            stop_words_free.append(each_token.lower())
+            for each_split in each_token.split():
+                if each_split in stop_words or any(char.isdigit() for char in each_split) or len(each_split.strip())<4:
+                    continue
+                stop_words_free.append(each_split.lower().strip())
         #return self.stemming(stop_words_free)
         return self.lemmatization(stop_words_free)
 

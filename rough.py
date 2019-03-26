@@ -8,6 +8,7 @@ from datetime import datetime
 from time import time
 import os
 import re
+import numpy
 
 #stmt = ["an apple a day keeps the", "doctor away"]
 
@@ -47,9 +48,14 @@ def timing(f):
 #     #if r:
 #         #print(r.group(0))
 
-filename = "temp.txt"
-with open(filename) as f:
-    temp_str = f.read()
-print(temp_str)
-print(type(temp_str))
-os.remove(filename)
+# filename = "temp.txt"
+# with open(filename) as f:
+#     temp_str = f.read()
+# print(temp_str)
+# print(type(temp_str))
+# os.remove(filename)
+
+#87783
+
+a = numpy.arange(18).reshape(25,2)
+print(a)
