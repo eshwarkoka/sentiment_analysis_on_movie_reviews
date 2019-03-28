@@ -1,6 +1,8 @@
 import scrapy
 import json
 import re
+import requests
+from bs4 import BeautifulSoup
 
 with open('./locators/xpaths.json') as f:
     xpaths = json.load(f)
@@ -21,15 +23,28 @@ class IMDBSpider(scrapy.Spider):
 
     def parse(self, response):
         global movie_name
-        #get first title from all titles
-        first_title = str(response.xpath(imdb["first_title"]).extract())
-        #extract movie name from first title
+        for url in self.start_urls:
+            imdb_content = requests.get(url+self.ip+"&s=all")
+        imdb_soup = BeautifulSoup(imdb_content.text, features='html.parser')
+        #get all tables
+        tables = imdb_soup.findAll("div",class_="findSection")
+        #get tables which contains <a name="tt> </aa> because we want Titles, not Names
+        tt = ""
+        for each_table in tables:
+            for a in each_table.find_all('a',href=False):
+                if a.has_attr("name") and a['name'].startswith("tt"):
+                    tt += str(each_table)
+
+        first_title = re.search(r'<td class="result_text">(.+?)</td>', tt).group(1)
+        print(first_title)
         movie_name = str(re.search(r'>(.+?)<',first_title).group(1)).replace(" ","_")
+        print(movie_name)
         title_id = ''
         #extract title id from first title
         for each in first_title.split("/"):
             if each.startswith("tt"):
                 title_id += each
+        print(title_id)
         #form user reviews link with title id
         link = imdb["urv_link_part_1"]+title_id+imdb["urv_link_part_2"]
         #scrape the link and redirect to scrape_reviews function
@@ -38,6 +53,9 @@ class IMDBSpider(scrapy.Spider):
 
     def scrape_reviews(self, response):
         global movie_name
+        #get total number of reviews
+        num_of_reviews = response.xpath(imdb["number_of_reviews"]).extract()
+        print(num_of_reviews)
         #get authors of reviews
         authors = response.xpath(imdb["authors"]).extract()
         #get review dates of reviews

@@ -44,7 +44,7 @@ def execute_crawler(movie_name):
     change_dir = current_dir + '/reviews_scrape'
     os.chdir(change_dir)
     os.system("python crawler.py " + movie_name)
-    preprocess_scraped_reviews()
+    #preprocess_scraped_reviews()
 
 def preprocess_scraped_reviews():
     temp_file_name = scraped_reviews_path+"temp.txt"
@@ -76,7 +76,7 @@ def feed_reviews_to_classifier(preprocessed_reviews):
 
 # generate_svm_train_pickle()
 
-movie_name = "billa"
+movie_name = "robo"
 movie_name = movie_name.replace(" ","")
 execute_crawler(movie_name)
 print("**DONE**")
