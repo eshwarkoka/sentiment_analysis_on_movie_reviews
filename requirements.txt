@@ -1,7 +1,10 @@
 asn1crypto==0.24.0
 attrs==19.1.0
 Automat==0.7.0
+beautifulsoup4==4.7.1
+certifi==2019.3.9
 cffi==1.12.2
+chardet==3.0.4
 constantly==15.1.0
 cryptography==2.6.1
 cssselect==1.0.3
@@ -19,12 +22,16 @@ PyDispatcher==2.0.5
 PyHamcrest==1.9.0
 pyOpenSSL==19.0.0
 queuelib==1.5.0
+requests==2.21.0
 scikit-learn==0.20.3
 scipy==1.2.1
 Scrapy==1.6.0
+selenium==3.141.0
 service-identity==18.1.0
 singledispatch==3.4.0.3
 six==1.12.0
+soupsieve==1.9
 Twisted==18.9.0
+urllib3==1.24.1
 w3lib==1.20.0
 zope.interface==4.6.0

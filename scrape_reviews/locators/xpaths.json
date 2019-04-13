@@ -1,0 +1,19 @@
+{
+    "imdb": [
+        {
+            "first_title"       : "(//td[@class='result_text'])[1]//a",
+            "urv_link_part_1"   : "https://www.imdb.com/title/",
+            "urv_link_part_2"   : "/reviews?ref_=tt_urv",
+            "load_more_button"  : "//button[@class='ipl-load-more__button']",
+            "number_of_reviews" : "(//div[@class='header'])//span",
+            "spoiler_open"      : "//div[@class='expander-icon-wrapper spoiler-warning__control']",
+            "reviews"           : "//*[@class='text show-more__control' or @class='text show-more__control clickable']",
+            "authors"           : "//span[@class='display-name-link']",
+            "review_dates"      : "//span[@class='review-date']",
+            "titles"            : "//a[@class='title']"
+        }
+    ],
+    "rotten_tomatoes" : [
+
+    ]
+}
