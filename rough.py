@@ -6,9 +6,13 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
 from datetime import datetime
 from time import time
+import json
 import os
 import re
 import numpy
+from nltk.corpus import stopwords
+from preprocess.Preprocess import PreprocessClass
+
 
 #stmt = ["an apple a day keeps the", "doctor away"]
 
@@ -16,17 +20,17 @@ import numpy
 
 #print(tfidf.fit(stmt).vocabulary_)
 
-sr = "*"*40+"\n"
-#print(sr)
-
-def timing(f):
-    def wrap(*args):
-        time1 = time()
-        f(*args)
-        time2 = time()
-        #print('{:s} function took {:.3f} ms'.format(f.__name__, (time2-time1)*1000.0))
-        print(f.__name__+" function took "+str(time2-time1)[:6]+" s")
-    return wrap
+# sr = "*"*40+"\n"
+# #print(sr)
+#
+# def timing(f):
+#     def wrap(*args):
+#         time1 = time()
+#         f(*args)
+#         time2 = time()
+#         #print('{:s} function took {:.3f} ms'.format(f.__name__, (time2-time1)*1000.0))
+#         print(f.__name__+" function took "+str(time2-time1)[:6]+" s")
+#     return wrap
 
 # @timing
 # def square(k):
@@ -57,11 +61,23 @@ def timing(f):
 
 #87783
 
-a = numpy.arange(18).reshape(25,2)
-print(a)
+#a = numpy.arange(18).reshape(25,2)
+
+p = PreprocessClass()
 
 
-
+stop_words = set(stopwords.words('english'))
+print(stop_words)
+# with open("/Users/eshwar/Documents/projects/sentiment_analysis_on_movie_reviews/data/scraped_reviews/Arjun_Reddy.json") as f:
+#     json_data = json.load(f)
+# all_reviews = []
+# for i in range(0, len(json_data)):
+#     all_reviews.append(json_data[i]["title"] + " " + json_data[i]["review"])
+# all_reviews_preprocessed = []
+# for each_review in all_reviews:
+#     all_reviews_preprocessed.append(p.pre_process(each_review))
+# print(all_reviews_preprocessed[0])
+#print(len(all_reviews_preprocessed))
 
 #*************************
 

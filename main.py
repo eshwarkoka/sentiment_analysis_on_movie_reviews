@@ -1,9 +1,8 @@
-import os,json
-import pickle
+import os, json, collections, nltk
+from nltk.util import ngrams
 from preprocess.Preprocess import PreprocessClass
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
-from sklearn.externals import joblib
 
 p = PreprocessClass()
 
@@ -30,21 +29,13 @@ for line in open(preprocessed_test_path,'r'):
     review = line.strip()
     dataset_reviews.append(review)
 
-# def generate_svm_train_pickle():
-#     tfidf_vectorizer = TfidfVectorizer()
-#     tfidf_vectorizer.fit_transform(dataset_reviews)
-#     #svm = LinearSVC()
-#     #svm.fit(X, target)
-#     with open("svm_train.pickle", "wb") as f:
-#         pickle.dump(tfidf_vectorizer, f)
-#     print("svm pickle generated !!")
 
 def execute_crawler(movie_name):
     current_dir = os.getcwd()
-    change_dir = current_dir + '/reviews_scrape'
+    change_dir = current_dir + '/scrape_reviews'
     os.chdir(change_dir)
     os.system("python crawler.py " + movie_name)
-    #preprocess_scraped_reviews()
+    preprocess_scraped_reviews()
 
 def preprocess_scraped_reviews():
     temp_file_name = scraped_reviews_path+"temp.txt"
@@ -62,7 +53,31 @@ def preprocess_scraped_reviews():
     for each_review in all_reviews:
         all_reviews_preprocessed.append(p.pre_process(each_review))
     print(len(all_reviews_preprocessed))
+    most_common_words(all_reviews_preprocessed)
     feed_reviews_to_classifier(all_reviews_preprocessed)
+
+def most_common_words(list):
+    tokens = []
+    #pos_tagging = []
+    for each_list in list:
+        tokens.extend(nltk.word_tokenize(each_list))
+        #pos_tagging.extend(nltk.pos_tag(nltk.word_tokenize(each_list)))
+    # with open("pos_tagging.txt","w") as f:
+    #     for each in pos_tagging:
+    #         f.write(str(each)+"\n")
+    # counter = collections.Counter(tokens)
+    # print(counter.most_common(20))
+    # print("*****")
+    # bigrams = nltk.bigrams(tokens)
+    # fdist = nltk.FreqDist(bigrams)
+    # print(fdist.most_common(20))
+    unigrams = ngrams(tokens, 1)
+    counter = collections.Counter(unigrams)
+    print(counter.most_common(20))
+    print("*******")
+    bigrams = ngrams(tokens, 2)
+    counter = collections.Counter(bigrams)
+    print(counter.most_common(20))
 
 def feed_reviews_to_classifier(preprocessed_reviews):
     tfidf = TfidfVectorizer()
@@ -72,11 +87,22 @@ def feed_reviews_to_classifier(preprocessed_reviews):
     print(X_test.shape)
     svm = LinearSVC()
     svm.fit(X, target)
-    print(svm.predict(X_test))
+    predicted = svm.predict(X_test)
+    generate_score(predicted)
 
-# generate_svm_train_pickle()
+def generate_score(predicted):
+    predicted_len = len(predicted)
+    print("Number of reviews scraped: " + str(predicted_len))
+    pos_rev_len = len([i for i in predicted if i])
+    print("Number of positive reviews: " + str(pos_rev_len))
+    neg_rev_len = len([i for i in predicted if not i])
+    print("Number of negative reviews: " + str(neg_rev_len))
+    overall_score = str((pos_rev_len/predicted_len)*100)
+    print("Overall score: " + overall_score)
 
-movie_name = "robo"
-movie_name = movie_name.replace(" ","")
-execute_crawler(movie_name)
-print("**DONE**")
+
+if __name__ == "__main__":
+    movie_name = "bahubali"
+    movie_name = movie_name.replace(" ","")
+    execute_crawler(movie_name)
+    print("**DONE**")

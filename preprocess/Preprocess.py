@@ -17,7 +17,7 @@ class PreprocessClass:
         return self.punctuation_removal(tokens)
 
     def punctuation_removal(self, tokens):
-        punc_dict = str.maketrans({ord(ch):" " for ch in string.punctuation })
+        punc_dict = str.maketrans({ord(ch):" " for ch in string.punctuation})
         punc_free_tokens = [each_token.translate(punc_dict) for each_token in tokens if each_token.strip()]
         return self.stopwords_removal(punc_free_tokens)
 
@@ -26,7 +26,7 @@ class PreprocessClass:
         stop_words_free = []
         for each_token in tokens:
             for each_split in each_token.split():
-                if each_split in stop_words or any(char.isdigit() for char in each_split) or len(each_split.strip())<4:
+                if each_split.lower() in stop_words or any(char.isdigit() for char in each_split) or len(each_split.strip()) < 4:
                     continue
                 stop_words_free.append(each_split.lower().strip())
         #return self.stemming(stop_words_free)
