@@ -6,6 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
 from datetime import datetime
 from time import time
+import time
 import json
 import os
 import re
@@ -61,18 +62,18 @@ def timing(f):
 
 #a = numpy.arange(18).reshape(25,2)
 
-stop_words = set(stopwords.words('english'))
-with open("/Users/eshwar/Documents/projects/sentiment_analysis_on_movie_reviews/data/scraped_reviews/Arjun_Reddy.json") as f:
-    json_data = json.load(f)
-all_reviews = []
-for i in range(0, len(json_data)):
-    all_reviews.append(json_data[i]["title"] + " " + json_data[i]["review"])
-#print(all_reviews[0])
-#print(all_reviews[1])
-all_reviews_preprocessed = []
-for each_review in all_reviews:
-    all_reviews_preprocessed.append(p.pre_process(each_review))
-print(len(all_reviews_preprocessed))
+# stop_words = set(stopwords.words('english'))
+# with open("/Users/eshwar/Documents/projects/sentiment_analysis_on_movie_reviews/data/scraped_reviews/Arjun_Reddy.json") as f:
+#     json_data = json.load(f)
+# all_reviews = []
+# for i in range(0, len(json_data)):
+#     all_reviews.append(json_data[i]["title"] + " " + json_data[i]["review"])
+# #print(all_reviews[0])
+# #print(all_reviews[1])
+# all_reviews_preprocessed = []
+# for each_review in all_reviews:
+#     all_reviews_preprocessed.append(p.pre_process(each_review))
+# print(len(all_reviews_preprocessed))
 
 #*************************
 
@@ -190,3 +191,13 @@ print(len(all_reviews_preprocessed))
 #             json.dump(json_data, f, ensure_ascii=False, indent=4)
 #         with open(target_path+"temp.txt", 'w') as f:
 #             f.write(movie_name)
+
+epoch = time.time()
+print(epoch)
+lt = time.ctime(epoch)
+print(lt)
+print(type(lt))
+localtime = time.localtime(epoch)
+print(localtime)
+time_string = time.strftime("%Y_%m_%d_%H_%M_%S", localtime)
+print(time_string)

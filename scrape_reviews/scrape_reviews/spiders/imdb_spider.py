@@ -1,4 +1,5 @@
-import scrapy, json, re
+import scrapy,json,re,time,os,sys,glob
+from scrapy.exceptions import CloseSpider
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,7 +14,8 @@ imdb = xpaths["imdb"][0]
 #define all the required variables
 movie_name = ''
 project_path = r'/Users/eshwar/Documents/projects/sentiment_analysis_on_movie_reviews/'
-target_path = project_path + "data/scraped_reviews/"
+scraped_reviews_path = project_path + "data/scraped_reviews/"
+predicted_reviews_path = project_path + "data/predicted_reviews/"
 chrome_driver_path = project_path+"scrape_reviews/chrome_driver/chromedriver"
 
 class IMDBSpider(scrapy.Spider):
@@ -29,7 +31,7 @@ class IMDBSpider(scrapy.Spider):
 
     def parse(self, response):
         #get all the globally defined variables
-        global movie_name, project_path, target_path, chrome_driver_path
+        global movie_name, project_path, scraped_reviews_path, chrome_driver_path
 
         #get first title
         first_title = response.xpath(imdb["first_title"]).extract()
@@ -41,6 +43,40 @@ class IMDBSpider(scrapy.Spider):
 
         #extract movie name from first title
         movie_name = str(re.search(r'">(.+?)</a>', str(first_title[0])).group(1)).replace(" ","_")
+        temp_movie_name = movie_name
+
+        #put timestamp
+        epoch = time.time()
+        movie_name+="$#$"+str(epoch)
+
+        # create temp file to store movie name temporarily
+        with open(scraped_reviews_path + "temp.txt", 'w') as f:
+            f.write(movie_name)
+
+        #check timestamp
+        current_dir = os.getcwd()
+        change_dir = scraped_reviews_path
+        os.chdir(change_dir)
+        temp = temp_movie_name+"$#$"
+        old_file_name = glob.glob(temp+"*")
+        diff = 0
+        #flag determines if searched movie is already searched within a week or not
+        #flag = 0 (file available)
+        #flag = 1 (new search)
+        flag = 1
+        if len(old_file_name) > 0:
+            old_file_name = old_file_name[0]
+            old_timestamp = old_file_name.split("$#$")[1][:-5]
+            diff = epoch - float(old_timestamp)
+            if diff < 604800:
+                flag = 0
+                with open(project_path+"flag.txt", "w") as f:
+                    f.write(str(flag))
+                raise CloseSpider('file available')
+            else:
+                os.remove(scraped_reviews_path+old_file_name)
+                os.remove(predicted_reviews_path+old_file_name)
+        os.chdir(current_dir)
 
         #form imdb reviews link
         reviews_link = imdb["urv_link_part_1"] + title_id + imdb["urv_link_part_2"]
@@ -103,14 +139,9 @@ class IMDBSpider(scrapy.Spider):
             } for a, rd, t, re in zip(authors_list, review_dates_list, titles_list, reviews_list)
         ]
 
-        #create json file with movie name
-        output_filename = target_path + movie_name + ".json"
+        output_filename = scraped_reviews_path + movie_name + ".json"
         with open(output_filename, 'w') as f:
             json.dump(json_data, f, ensure_ascii=False, indent=4)
-
-        #create temp file to store movie name temporarily
-        with open(target_path+"temp.txt", 'w') as f:
-            f.write(movie_name)
 
         #close the chrome driver
         chrome_driver.close()
