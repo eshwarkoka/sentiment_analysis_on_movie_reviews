@@ -2,6 +2,7 @@ from preprocess.Preprocess import PreprocessClass
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
@@ -56,7 +57,9 @@ def logistic_regression(trainsize=0.5, ng_min=1, ng_max=1):
     lr = LogisticRegression(solver='lbfgs')
     lr.fit(X_train, y_train)
     acc_score = accuracy_score(y_test, lr.predict(X_test))
-    output_file_str += "Accuracy Score: "+str(acc_score)+"\n"
+    c_m = confusion_matrix(y_test, lr.predict(X_test))
+    output_file_str += "Accuracy Score: " + str(acc_score)+"\n"
+    output_file_str += "Confusion Matrix: \n" + str(c_m) + "\n"
 
 @timer
 def linear_svc(trainsize=0.5, ng_min=1, ng_max=1):
@@ -69,7 +72,9 @@ def linear_svc(trainsize=0.5, ng_min=1, ng_max=1):
     svm = LinearSVC()
     svm.fit(X_train, y_train)
     acc_score = accuracy_score(y_test, svm.predict(X_test))
-    output_file_str += "Accuracy Score: " +str(acc_score)+ "\n"
+    c_m = confusion_matrix(y_test, svm.predict(X_test))
+    output_file_str += "Accuracy Score: " + str(acc_score)+ "\n"
+    output_file_str += "Confusion Matrix: \n"+str(c_m) + "\n"
 
 @timer
 def decision_tree(trainsize=0.5, ng_min=1, ng_max=1):
@@ -82,7 +87,9 @@ def decision_tree(trainsize=0.5, ng_min=1, ng_max=1):
     dt = DecisionTreeClassifier()
     dt.fit(X_train, y_train)
     acc_score = accuracy_score(y_test, dt.predict(X_test))
-    output_file_str += "Accuracy Score: " +str(acc_score)+ "\n"
+    c_m = confusion_matrix(y_test, dt.predict(X_test))
+    output_file_str += "Accuracy Score: " + str(acc_score)+ "\n"
+    output_file_str += "Confusion Matrix: \n" + str(c_m) + "\n"
 
 if __name__ == '__main__':
 
@@ -93,42 +100,42 @@ if __name__ == '__main__':
     #train_size = 0.5, ng_max = 2
     logistic_regression(trainsize=0.5, ng_max=2)
     print("lr2 completed")
-    # train_size = 0.75, ng_max = 1
+    # # train_size = 0.75, ng_max = 1
     logistic_regression(trainsize=0.75, ng_max=1)
     print("lr3 completed")
-    # train_size = 0.75, ng_max = 2
+    # # train_size = 0.75, ng_max = 2
     logistic_regression(trainsize=0.75, ng_max=2)
     print("lr4 completed")
-
-    # support vector machine
-    # train_size = 0.5, ng_max = 1
+    #
+    # # support vector machine
+    # # train_size = 0.5, ng_max = 1
     linear_svc(trainsize=0.5, ng_max=1)
     print("svm1 completed")
-    # train_size = 0.5, ng_max = 2
+    # # train_size = 0.5, ng_max = 2
     linear_svc(trainsize=0.5, ng_max=2)
     print("svm2 completed")
-    # train_size = 0.75, ng_max = 1
+    # # train_size = 0.75, ng_max = 1
     linear_svc(trainsize=0.75, ng_max=1)
     print("svm3 completed")
-    # train_size = 0.75, ng_max = 2
+    # # train_size = 0.75, ng_max = 2
     linear_svc(trainsize=0.75, ng_max=2)
     print("svm4 completed")
-
-    # decision tree
-    # train_size = 0.5, ng_max = 1
+    #
+    # # decision tree
+    # # train_size = 0.5, ng_max = 1
     decision_tree(trainsize=0.5, ng_max=1)
     print("dt1 completed")
-    # train_size = 0.5, ng_max = 2
-    #decision_tree(trainsize=0.5, ng_max=2)
-    #print("dt2 completed")
-    # train_size = 0.75, ng_max = 1
+    # # train_size = 0.5, ng_max = 2
+    # #decision_tree(trainsize=0.5, ng_max=2)
+    # #print("dt2 completed")
+    # # train_size = 0.75, ng_max = 1
     decision_tree(trainsize=0.75, ng_max=1)
     print("dt3 completed")
-    # train_size = 0.75, ng_max = 2
-    #decision_tree(trainsize=0.75, ng_max=2)
-    #print("dt4 completed")
-
-    with open("classifiers_comparision_output.txt", "w") as output_file:
+    # # train_size = 0.75, ng_max = 2
+    # #decision_tree(trainsize=0.75, ng_max=2)
+    # #print("dt4 completed")
+    #
+    with open("classifiers_comparision_cm_output.txt", "w") as output_file:
         output_file.write(output_file_str)
     print("**DONE**")
 

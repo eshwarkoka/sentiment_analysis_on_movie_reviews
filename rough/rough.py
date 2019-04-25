@@ -192,12 +192,14 @@ def timing(f):
 #         with open(target_path+"temp.txt", 'w') as f:
 #             f.write(movie_name)
 
-epoch = time.time()
-print(epoch)
-lt = time.ctime(epoch)
-print(lt)
-print(type(lt))
-localtime = time.localtime(epoch)
-print(localtime)
-time_string = time.strftime("%Y_%m_%d_%H_%M_%S", localtime)
-print(time_string)
+# epoch = time.time()
+# print(epoch)
+# lt = time.ctime(epoch)
+# print(lt)
+# print(type(lt))
+# localtime = time.localtime(epoch)
+# print(localtime)
+# time_string = time.strftime("%Y_%m_%d_%H_%M_%S", localtime)
+# print(time_string)
+for i in range(0,10,2):
+    print(i)

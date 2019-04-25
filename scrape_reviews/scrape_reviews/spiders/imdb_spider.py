@@ -1,10 +1,11 @@
-import scrapy,json,re,time,os,sys,glob
+import scrapy,json,re,time,os,glob
 from scrapy.exceptions import CloseSpider
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options
 
 #get all the imdb xpaths from xpaths.json file
 with open('./locators/xpaths.json') as f:
@@ -82,7 +83,9 @@ class IMDBSpider(scrapy.Spider):
         reviews_link = imdb["urv_link_part_1"] + title_id + imdb["urv_link_part_2"]
 
         #get chrome driver executable
-        chrome_driver = webdriver.Chrome(chrome_driver_path)
+        options = Options()
+        options.headless = True
+        chrome_driver = webdriver.Chrome(chrome_driver_path, chrome_options=options)
 
         #go to reviews link
         chrome_driver.get(reviews_link)

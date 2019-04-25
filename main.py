@@ -3,6 +3,7 @@ from nltk.util import ngrams
 from preprocess.Preprocess import PreprocessClass
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
+from flask import Flask,render_template,request
 
 #create the instance of PreprocessClass
 p = PreprocessClass()
@@ -132,10 +133,22 @@ def print_score(movie_name):
     print("Negative reviews : " + json_data[0]["negative_reviews"])
     print("Overall score : " + json_data[0]["overall_score"])
 
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/search", methods=['POST'])
+def search():
+    movie_name = request.form['search']
+
+
 
 #main code which executes only when this file is executed
 if __name__ == "__main__":
-    movie_name = "arjun reddy"
+    #app.run(debug=True)
+    movie_name = "pele"
     movie_name = movie_name.replace(" ","")
     execute_crawler(movie_name)
     print("**DONE**")
